@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "733854002764",
+    "project_id": "omega-dahlia-459901-n5",
+    "storage_bucket": "omega-dahlia-459901-n5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733854002764:android:422e1229e2dd6148cb8ee9",
+        "android_client_info": {
+          "package_name": "com.example.shoes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAalqcB6U1gvla0oqJ_coTNgWxz273KvKA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
