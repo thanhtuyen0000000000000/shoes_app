@@ -17,7 +17,7 @@ import com.example.shoes.Model.SliderModel
 import com.example.shoes.Adapter.SliderAdapter
 import com.example.shoes.ViewModel.MainViewModel
 import com.example.shoes.databinding.ActivityMainBinding
-
+import com.google.firebase.database.FirebaseDatabase
 class MainActivity : AppCompatActivity() {
     private val viewModel=MainViewModel()
     private lateinit var binding: ActivityMainBinding
@@ -25,11 +25,30 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val username = intent.getStringExtra("username")
+        if (username != null) {
+            getUserInfo(username)
+        }
         initBanner()
         initBrand()
         initPopular()
         initBottomMenu()
+    }
+
+    private fun getUserInfo(username: String) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users")
+
+        usersRef.child(username).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val name = snapshot.child("username").value.toString()
+                    binding.usernameTextView.text = name
+                }
+            }
+            .addOnFailureListener {
+                binding.usernameTextView.text = "User"
+            }
     }
 
     private fun initBottomMenu() {

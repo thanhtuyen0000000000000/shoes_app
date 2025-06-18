@@ -46,7 +46,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    //Firebase
     implementation(libs.firebase.database)
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,7 +59,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 
-//ViewModel
+    //ViewModel
     implementation("androidx.activity:activity-ktx:1.4.0")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")

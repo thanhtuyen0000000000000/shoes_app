@@ -43,7 +43,7 @@
                         android:textColor="@color/grey" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/usernameTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Jamine"
