@@ -319,7 +319,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/btn_3" />
+                    android:src="@drawable/btn_4" />
 
                 <TextView
                     android:id="@+id/textView14"
@@ -341,7 +341,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:src="@drawable/btn_3" />
+                    android:src="@drawable/btn_5" />
 
                 <TextView
                     android:id="@+id/textView15"
