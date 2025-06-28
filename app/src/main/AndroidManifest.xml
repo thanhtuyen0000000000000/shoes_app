@@ -33,6 +33,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.FavActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
         <activity android:name=".activity.LoginActivity" />

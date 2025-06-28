@@ -13,10 +13,14 @@ import com.example.shoes.Adapter.ColorAdapter
 import com.example.shoes.Adapter.SizeAdapter
 import com.example.shoes.Adapter.SliderAdapter
 import com.example.shoes.Helper.ManagmentCart
+import com.example.shoes.Helper.ManagmentFav
 import com.example.shoes.Model.ItemsModel
 import com.example.shoes.Model.SliderModel
 import com.example.shoes.R
 import com.example.shoes.databinding.ActivityDetailBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.ResourceBundle.getBundle
 
 class DetailActivity : BaseActivity() {
@@ -24,13 +28,14 @@ class DetailActivity : BaseActivity() {
     private lateinit var item:ItemsModel
     private var numberOrder=1
     private lateinit var managmentCart: ManagmentCart
-
+    private lateinit var managmentFav: ManagmentFav
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         managmentCart=ManagmentCart(this)
+        managmentFav = ManagmentFav(this)
         getBundle()
         banners()
         initLists()
@@ -48,7 +53,9 @@ class DetailActivity : BaseActivity() {
             colorList.add(imageUrl)
         }
 
-        binding.colorList.adapter=ColorAdapter(colorList)
+        binding.colorList.adapter = ColorAdapter(colorList) { selectedPosition ->
+            binding.slider.setCurrentItem(selectedPosition, true)
+        }
         binding.colorList.layoutManager= LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
     }
 
@@ -70,6 +77,17 @@ class DetailActivity : BaseActivity() {
         }
 
     }
+    private fun updateFavIcon() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val isFav = managmentFav.isFavorite(item.title)
+            if (isFav) {
+                binding.favBtn.setImageResource(R.drawable.fav_icon_filled)
+            } else {
+                binding.favBtn.setImageResource(R.drawable.fav_icon)
+            }
+        }
+    }
+
 
 
     private fun getBundle(){
@@ -79,10 +97,28 @@ class DetailActivity : BaseActivity() {
         binding.descriptionTxt.text=item.description
         binding.priceTxt.text="$"+item.price
         binding.ratingTxt.text="${item.rating} Rating"
+
+        updateFavIcon()
+
         binding.addToCartBtn.setOnClickListener{
             item.numberInCart=numberOrder
-            managmentCart.insertFood(item)
+            managmentCart.insertShoe(item)
         }
+        binding.favBtn.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val isFav = managmentFav.isFavorite(item.title)
+                if (isFav) {
+                    managmentFav.removeFav(item.title) {
+                        binding.favBtn.setImageResource(R.drawable.fav_icon)
+                    }
+                } else {
+                    managmentFav.insertShoe(item) {
+                        binding.favBtn.setImageResource(R.drawable.fav_icon_filled)
+                    }
+                }
+            }
+        }
+
         binding.backBtn.setOnClickListener{finish()}
         binding.cartBtn.setOnClickListener{
             startActivity(Intent(this@DetailActivity,CartActivity::class.java))

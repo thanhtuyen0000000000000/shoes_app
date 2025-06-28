@@ -49,6 +49,7 @@ dependencies {
     //Firebase
     implementation(libs.firebase.database)
     implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

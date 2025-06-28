@@ -63,9 +63,4 @@ class RegisterActivity : AppCompatActivity() {
     }
 }
 
-// ✅ Đặt bên ngoài class RegisterActivity
-//data class User(
-//    val username: String = "",
-//    val password: String = "",
-//    val phonenumer:String=""
-//)
+

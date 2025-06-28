@@ -37,7 +37,10 @@ class LoginActivity : AppCompatActivity() {
                         if (password == storedPassword) {
                             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
                             // Điều hướng sang trang chính
+                            val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                            sharedPref.edit().putString("username", username).apply()
                             val intent = Intent(this, MainActivity::class.java) // Đổi MainActivity nếu cần
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             intent.putExtra("username", username)
                             startActivity(intent)
                             finish()

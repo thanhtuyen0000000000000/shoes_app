@@ -1,6 +1,7 @@
 package com.example.shoes.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.shoes.Helper.ChangeNumberItemsListener
 import com.example.shoes.Helper.ManagmentCart
 import com.example.shoes.Model.ItemsModel
+import com.example.shoes.activity.DetailActivity
 import com.example.shoes.databinding.ActivityDetailBinding
 import com.example.shoes.databinding.ViewholderCartBinding
 import java.util.ArrayList
@@ -58,6 +60,12 @@ class CartAdapter (private val listItemSelected:ArrayList<ItemsModel>,
                     changeNumberItemsListener?.onChanged()
                 }
             })
+        }
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailActivity::class.java)
+            intent.putExtra("object", item)
+            holder.itemView.context.startActivity(intent)
         }
 
     }

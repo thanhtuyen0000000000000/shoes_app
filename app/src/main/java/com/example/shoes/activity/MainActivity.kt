@@ -55,6 +55,13 @@ class MainActivity : AppCompatActivity() {
         binding.cartBtn.setOnClickListener{
             startActivity(Intent(this@MainActivity,CartActivity::class.java))
         }
+        binding.favBtn.setOnClickListener{
+            startActivity(Intent(this@MainActivity,FavActivity::class.java))
+        }
+        binding.profileBtn.setOnClickListener{
+            startActivity(Intent(this,ProfileActivity::class.java))
+        }
+
     }
 
     private fun initBanner(){
