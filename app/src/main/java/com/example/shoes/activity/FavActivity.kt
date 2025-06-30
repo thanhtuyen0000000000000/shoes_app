@@ -2,6 +2,7 @@ package com.example.shoes.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ class FavActivity : BaseActivity() {
 
     private lateinit var binding: ActivityFavBinding
     private lateinit var managmentFav: ManagmentFav
+    private lateinit var favAdapter: FavAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,43 +23,77 @@ class FavActivity : BaseActivity() {
         setContentView(binding.root)
 
         managmentFav = ManagmentFav(this)
-
+        setupRecyclerView()
         setVariable()
-        initFavList()
+        
+        // Load favorites data
+        loadFavoritesData()
+    }
+
+    private fun setupRecyclerView() {
+        binding.viewCart.layoutManager = LinearLayoutManager(this)
     }
 
     private fun setVariable() {
         binding.backBtn.setOnClickListener { finish() }
-        binding.viewCart.layoutManager = LinearLayoutManager(this)
-    }
-
-    private fun initFavList() {
-        lifecycleScope.launch {
-            val favList = managmentFav.getListFav()
-            binding.viewCart.adapter = FavAdapter(favList, this@FavActivity) {
-                refreshFavorites()
-            }
-
-            updateEmptyState(favList.isEmpty())
+        binding.exploreBtn?.setOnClickListener { 
+            finish() // Quay về màn hình chính để khám phá
         }
     }
 
-    private fun refreshFavorites() {
-        initFavList() // Load lại danh sách khi có thay đổi
+    private fun loadFavoritesData() {
+        lifecycleScope.launch {
+            try {
+                showLoading(true)
+                val favList = managmentFav.getListFav()
+                Log.d("FavActivity", "Loaded favorite items: ${favList.size}")
+                
+                // In ra thông tin từng item để debug
+                favList.forEachIndexed { index, item ->
+                    Log.d("FavActivity", "Item $index: ${item.title}")
+                }
+                
+                initFavList(favList)
+            } catch (e: Exception) {
+                Log.e("FavActivity", "Error loading favorites: ${e.message}")
+                showEmptyState(true)
+            } finally {
+                showLoading(false)
+            }
+        }
     }
 
-    private fun updateEmptyState(isEmpty: Boolean) {
-        binding.emptyTxt.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        binding.scrollView2.visibility = if (isEmpty) View.GONE else View.VISIBLE
+    private fun initFavList(favList: ArrayList<com.example.shoes.Model.ItemsModel>) {
+        favAdapter = FavAdapter(favList, this@FavActivity) {
+            refreshFavorites()
+        }
+        
+        binding.viewCart.adapter = favAdapter
+        
+        // Hiển thị empty state hoặc content dựa trên kích thước list
+        val isEmpty = favList.isEmpty()
+        showEmptyState(isEmpty)
     }
+
+    private fun refreshFavorites() {
+        Log.d("FavActivity", "Refreshing favorites list...")
+        loadFavoritesData()
+    }
+
+    private fun showEmptyState(show: Boolean) {
+        Log.d("FavActivity", "Show empty state: $show")
+        binding.emptyStateLayout.visibility = if (show) View.VISIBLE else View.GONE
+        binding.scrollView2.visibility = if (show) View.GONE else View.VISIBLE
+    }
+
+    private fun showLoading(show: Boolean) {
+        // Có thể thêm ProgressBar nếu cần
+        Log.d("FavActivity", "Loading: $show")
+    }
+
     override fun onResume() {
         super.onResume()
-        initFavList()
+        // Refresh favorites khi quay lại activity
+        loadFavoritesData()
     }
-
-
-
-
-
-
 }

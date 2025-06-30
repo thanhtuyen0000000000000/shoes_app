@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class ProfileActivity: BaseActivity() {
     private lateinit var binding: ActivityProfileBinding
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -23,32 +24,35 @@ class ProfileActivity: BaseActivity() {
         }
 
         loadUserInfo(username)
+        setupClickListeners()
+    }
 
+    private fun setupClickListeners() {
+        // Back button
         binding.backBtn.setOnClickListener {
             finish()
         }
 
+        // Change password
         binding.changePasswordBtn.setOnClickListener {
-            Toast.makeText(this, "Chức năng đổi mật khẩu chưa hỗ trợ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Chức năng đổi mật khẩu sẽ được phát triển", Toast.LENGTH_SHORT).show()
+            // TODO: Implement change password functionality
         }
 
+        // Logout
         binding.logoutBtn.setOnClickListener {
-            getSharedPreferences("MyAppPrefs", MODE_PRIVATE).edit().clear().apply()
-            Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show()
-
-            val intent = Intent(this, IntroActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            logout()
         }
 
-        binding.cartInfoTextView.setOnClickListener{
+        // Cart info - click vào layout thay vì textview
+        binding.cartInfoLayout.setOnClickListener {
             val intent = Intent(this, CartActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
-        binding.favInfoTextView.setOnClickListener{
-            val intent = Intent(this,FavActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        // Favorite info - click vào layout thay vì textview  
+        binding.favInfoLayout.setOnClickListener {
+            val intent = Intent(this, FavActivity::class.java)
             startActivity(intent)
         }
     }
@@ -60,12 +64,22 @@ class ProfileActivity: BaseActivity() {
             if (snapshot.exists()) {
                 val user = snapshot.getValue(UserModel::class.java)
                 user?.let {
-                    binding.usernameTextView.text = "👤 ${it.username}"
-                    binding.phoneTextView.text = "📞 ${it.phonenumber}"
-                    binding.cartInfoTextView.text = "🛒 Giỏ hàng: ${it.listCart.size} sản phẩm"
-                    binding.favInfoTextView.text = "❤️ Yêu thích: ${it.listFav.size} sản phẩm"
+                    // Update header username
+                    binding.usernameTextView.text = it.username
+                    
+                    // Update info card
+                    binding.usernameDisplayTextView.text = it.username
+                    binding.phoneTextView.text = if (it.phonenumber.isNotEmpty()) {
+                        it.phonenumber
+                    } else {
+                        "Chưa cập nhật"
+                    }
+                    
+                    // Update activity counts
+                    binding.cartInfoTextView.text = "${it.listCart.size} sản phẩm"
+                    binding.favInfoTextView.text = "${it.listFav.size} yêu thích"
 
-                    // Nếu có avatar URL thì load bằng Glide
+                    // TODO: Nếu có avatar URL thì load bằng Glide
                     // Glide.with(this).load(it.avatarUrl).into(binding.avatarImageView)
                 }
             } else {
@@ -74,5 +88,18 @@ class ProfileActivity: BaseActivity() {
         }.addOnFailureListener {
             Toast.makeText(this, "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun logout() {
+        // Clear shared preferences
+        getSharedPreferences("MyAppPrefs", MODE_PRIVATE).edit().clear().apply()
+        
+        Toast.makeText(this, "Đã đăng xuất thành công", Toast.LENGTH_SHORT).show()
+
+        // Navigate to intro activity
+        val intent = Intent(this, IntroActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 }

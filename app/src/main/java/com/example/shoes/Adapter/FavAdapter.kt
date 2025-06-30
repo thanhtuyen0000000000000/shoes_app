@@ -34,6 +34,7 @@ class FavAdapter(
         val item = favList[position]
 
         holder.binding.titleTxt.text = item.title
+        holder.binding.brandTxt.text = "Brand: ${item.brand}"
         holder.binding.feeEachItem.text = "$${item.price}"
 
         Glide.with(holder.itemView.context)

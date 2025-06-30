@@ -35,13 +35,28 @@ class LoginActivity : AppCompatActivity() {
                     if (snapshot.exists()) {
                         val storedPassword = snapshot.child("password").value.toString()
                         if (password == storedPassword) {
+                            // Lấy role của user (mặc định là "user" nếu không có)
+                            val userRole = snapshot.child("role").value?.toString() ?: "user"
+                            
                             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                            // Điều hướng sang trang chính
+                            
+                            // Lưu thông tin đăng nhập
                             val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
-                            sharedPref.edit().putString("username", username).apply()
-                            val intent = Intent(this, MainActivity::class.java) // Đổi MainActivity nếu cần
+                            sharedPref.edit()
+                                .putString("username", username)
+                                .putString("userRole", userRole)
+                                .apply()
+                            
+                            // Điều hướng dựa vào role
+                            val intent = if (userRole == "admin") {
+                                Intent(this, AdminActivity::class.java)
+                            } else {
+                                Intent(this, MainActivity::class.java)
+                            }
+                            
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             intent.putExtra("username", username)
+                            intent.putExtra("userRole", userRole)
                             startActivity(intent)
                             finish()
                         } else {
@@ -58,7 +73,13 @@ class LoginActivity : AppCompatActivity() {
 
         // Bạn có thể xử lý quên mật khẩu ở đây nếu cần
         binding.forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Tính năng chưa hỗ trợ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Tính năng sẽ được phát triển", Toast.LENGTH_SHORT).show()
+        }
+
+        // Chuyển đến trang đăng ký
+        binding.registerLinkText.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
         }
     }
 }

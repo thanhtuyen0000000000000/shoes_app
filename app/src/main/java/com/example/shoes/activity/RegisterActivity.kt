@@ -60,6 +60,11 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this, "Lỗi kiểm tra tài khoản: ${it.message}", Toast.LENGTH_SHORT).show()
                 }
         }
+
+        // Chuyển về trang đăng nhập
+        binding.loginLinkText.setOnClickListener {
+            finish() // Quay lại LoginActivity
+        }
     }
 }
 

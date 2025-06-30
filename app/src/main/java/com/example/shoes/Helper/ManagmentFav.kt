@@ -1,106 +1,9 @@
-//package com.example.shoes.Helper
-//
-//import android.content.Context
-//import android.widget.Toast
-//import com.example.shoes.Model.ItemsModel
-//import com.google.firebase.database.*
-//import com.google.firebase.auth.FirebaseAuth
-//import kotlinx.coroutines.*
-//import kotlinx.coroutines.tasks.await
-//import kotlin.coroutines.resume
-//import kotlin.coroutines.resumeWithException
-//import kotlin.coroutines.suspendCoroutine
-//import com.example.shoes.Helper.setValueAwait
-//class ManagmentFav(private val context: Context) {
-//    private val database = FirebaseDatabase.getInstance().reference
-//
-//    private fun getUsername(): String? {
-//        val sharedPref = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-//        return sharedPref.getString("username", null)
-//    }
-//
-//    fun insertShoe(item: ItemsModel, onDone: (() -> Unit)? = null) {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val userId = getUsername() ?: return@launch
-//                val favList = getListFav().toMutableList()
-//                val alreadyExists = favList.any { it.title == item.title }
-//
-//                if (!alreadyExists) {
-//                    favList.add(item)
-//                    database.child("users").child(userId).child("listFav").setValueAwait(favList)
-//                }
-//
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show()
-//                    onDone?.invoke()
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(context, "Error adding to favorites: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
-//
-//    suspend fun getListFav(): ArrayList<ItemsModel> {
-//        return suspendCancellableCoroutine { continuation ->
-//            val userId = getUsername() ?: run {
-//                continuation.resume(arrayListOf())
-//                return@suspendCancellableCoroutine
-//            }
-//
-//            database.child("users").child(userId).child("listFav")
-//                .addListenerForSingleValueEvent(object : ValueEventListener {
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        val favList = ArrayList<ItemsModel>()
-//                        for (childSnapshot in snapshot.children) {
-//                            val item = childSnapshot.getValue(ItemsModel::class.java)
-//                            item?.let { favList.add(it) }
-//                        }
-//                        continuation.resume(favList)
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        continuation.resumeWithException(error.toException())
-//                    }
-//                })
-//        }
-//    }
-//
-//    fun removeFav(title: String, onDone: (() -> Unit)? = null) {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val userId = getUsername() ?: return@launch
-//                val favList = getListFav().filterNot { it.title == title }
-//
-//                database.child("users").child(userId).child("listFav").setValueAwait(favList)
-//
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show()
-//                    onDone?.invoke()
-//                }
-//            } catch (e: Exception) {
-//                withContext(Dispatchers.Main) {
-//                    Toast.makeText(context, "Error removing from favorites: ${e.message}", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
-//
-//    suspend fun isFavorite(title: String): Boolean {
-//        val favList = getListFav()
-//        return favList.any { it.title == title }
-//    }
-//}
-
 package com.example.shoes.Helper
 
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.shoes.Model.ItemsModel
-
 import com.google.firebase.database.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -113,23 +16,35 @@ class ManagmentFav(private val context: Context) {
 
     private fun getUsername(): String? {
         val sharedPref = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-        return sharedPref.getString("username", null)
+        val username = sharedPref.getString("username", null)
+        Log.d("ManagmentFav", "Username from SharedPrefs: $username")
+        return username
     }
 
     fun insertShoe(item: ItemsModel, onDone: (() -> Unit)? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val userId = getUsername() ?: return@launch
+                val userId = getUsername() ?: run {
+                    Log.e("ManagmentFav", "Username is null, cannot insert shoe")
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Please login first", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+                
+                Log.d("ManagmentFav", "Inserting favorite: ${item.title} for user: $userId")
                 val itemRef = database.child("users").child(userId).child("listFav").child(item.title)
 
                 itemRef.setValue(item).await()
                 delay(100) // Đảm bảo Firebase sync ổn định
+                Log.d("ManagmentFav", "Successfully saved favorite to Firebase")
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Added to Favorites", Toast.LENGTH_SHORT).show()
                     onDone?.invoke()
                 }
             } catch (e: Exception) {
+                Log.e("ManagmentFav", "Error inserting favorite: ${e.message}")
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Error adding to favorites: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -140,22 +55,37 @@ class ManagmentFav(private val context: Context) {
     suspend fun getListFav(): ArrayList<ItemsModel> {
         return suspendCancellableCoroutine { continuation ->
             val userId = getUsername() ?: run {
+                Log.e("ManagmentFav", "Username is null, returning empty favorites")
                 continuation.resume(arrayListOf())
                 return@suspendCancellableCoroutine
             }
 
+            Log.d("ManagmentFav", "Loading favorites for user: $userId")
             database.child("users").child(userId).child("listFav")
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val favList = ArrayList<ItemsModel>()
+                        Log.d("ManagmentFav", "Firebase snapshot exists: ${snapshot.exists()}, children count: ${snapshot.childrenCount}")
+                        
                         for (childSnapshot in snapshot.children) {
-                            val item = childSnapshot.getValue(ItemsModel::class.java)
-                            item?.let { favList.add(it) }
+                            try {
+                                val item = childSnapshot.getValue(ItemsModel::class.java)
+                                if (item != null) {
+                                    favList.add(item)
+                                    Log.d("ManagmentFav", "Loaded favorite: ${item.title}")
+                                } else {
+                                    Log.w("ManagmentFav", "Failed to parse favorite from snapshot: ${childSnapshot.key}")
+                                }
+                            } catch (e: Exception) {
+                                Log.e("ManagmentFav", "Error parsing favorite: ${e.message}")
+                            }
                         }
+                        Log.d("ManagmentFav", "Total favorites loaded: ${favList.size}")
                         continuation.resume(favList)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
+                        Log.e("ManagmentFav", "Firebase error: ${error.message}")
                         continuation.resumeWithException(error.toException())
                     }
                 })
@@ -166,16 +96,19 @@ class ManagmentFav(private val context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val userId = getUsername() ?: return@launch
+                Log.d("ManagmentFav", "Removing favorite: $title for user: $userId")
+                
                 val itemRef = database.child("users").child(userId).child("listFav").child(title)
-
                 itemRef.removeValue().await()
                 delay(100)
+                Log.d("ManagmentFav", "Successfully removed favorite from Firebase")
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Removed from Favorites", Toast.LENGTH_SHORT).show()
                     onDone?.invoke()
                 }
             } catch (e: Exception) {
+                Log.e("ManagmentFav", "Error removing favorite: ${e.message}")
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Error removing from favorites: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -190,10 +123,13 @@ class ManagmentFav(private val context: Context) {
             database.child("users").child(userId).child("listFav").child(title)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        continuation.resume(snapshot.exists())
+                        val isFav = snapshot.exists()
+                        Log.d("ManagmentFav", "Item '$title' is favorite: $isFav")
+                        continuation.resume(isFav)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
+                        Log.e("ManagmentFav", "Error checking favorite: ${error.message}")
                         continuation.resume(false)
                     }
                 })

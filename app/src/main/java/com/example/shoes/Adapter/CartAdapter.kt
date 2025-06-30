@@ -2,6 +2,7 @@ package com.example.shoes.Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,21 @@ class CartAdapter (private val listItemSelected:ArrayList<ItemsModel>,
         val item=listItemSelected[position]
 
         holder.binding.titleTxt.text=item.title
+        holder.binding.brandTxt.text="Brand: ${item.brand}"
+        
+        // Debug logging cho size
+        Log.d("CartAdapter", "=== Cart Item Debug ===")
+        Log.d("CartAdapter", "Item: ${item.title}")
+        Log.d("CartAdapter", "Size array: ${item.size}")
+        Log.d("CartAdapter", "Size array size: ${item.size.size}")
+        Log.d("CartAdapter", "Selected size (first): ${if (item.size.isNotEmpty()) item.size[0] else "N/A"}")
+        Log.d("CartAdapter", "Quantity: ${item.numberInCart}")
+        Log.d("CartAdapter", "======================")
+        
+        // Hiển thị size đã chọn (luôn là phần tử đầu tiên trong array)
+        val selectedSize = if (item.size.isNotEmpty()) item.size[0] else "N/A"
+        holder.binding.sizeTxt.text="Size: $selectedSize"
+        
         holder.binding.feeEachItem.text="$${item.price}"
         holder.binding.totalEachItem.text="$${Math.round(item.numberInCart*item.price)}"
         holder.binding.numberItemTxt.text = item.numberInCart.toString()
