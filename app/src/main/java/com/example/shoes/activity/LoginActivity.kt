@@ -35,20 +35,17 @@ class LoginActivity : AppCompatActivity() {
                     if (snapshot.exists()) {
                         val storedPassword = snapshot.child("password").value.toString()
                         if (password == storedPassword) {
-                            // Lấy role của user (mặc định là "user" nếu không có)
-                            val userRole = snapshot.child("role").value?.toString() ?: "user"
+
                             
                             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                            
-                            // Lưu thông tin đăng nhập
+
                             val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
                             sharedPref.edit()
                                 .putString("username", username)
-                                .putString("userRole", userRole)
                                 .apply()
                             
                             // Điều hướng dựa vào role
-                            val intent = if (userRole == "admin") {
+                            val intent = if (username == "admin") {
                                 Intent(this, AdminActivity::class.java)
                             } else {
                                 Intent(this, MainActivity::class.java)
@@ -56,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
                             
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             intent.putExtra("username", username)
-                            intent.putExtra("userRole", userRole)
+
                             startActivity(intent)
                             finish()
                         } else {

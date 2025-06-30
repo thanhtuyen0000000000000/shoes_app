@@ -30,8 +30,8 @@ class AdminActivity : BaseActivity() {
     private fun setupClickListeners() {
         // Quản lý sản phẩm
         binding.manageProductsCard.setOnClickListener {
-            Toast.makeText(this, "Tính năng quản lý sản phẩm sẽ được phát triển", Toast.LENGTH_SHORT).show()
-            // TODO: Chuyển đến ProductManagementActivity
+//            Toast.makeText(this, "Tính năng quản lý sản phẩm sẽ được phát triển", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, ProductManagementActivity::class.java))
         }
 
         // Quản lý đơn hàng
@@ -48,8 +48,10 @@ class AdminActivity : BaseActivity() {
 
         // Quản lý người dùng
         binding.manageUsersCard.setOnClickListener {
-            Toast.makeText(this, "Tính năng quản lý người dùng sẽ được phát triển", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Tính năng quản lý người dùng sẽ được phát triển", Toast.LENGTH_SHORT).show()
             // TODO: Chuyển đến UserManagementActivity
+            startActivity(Intent(this, UserManagementActivity::class.java))
+
         }
 
         // Cài đặt hệ thống (mới)

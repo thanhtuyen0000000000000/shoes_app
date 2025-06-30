@@ -4,7 +4,6 @@ data class UserModel(
     val username: String = "",
     val password: String = "",
     val phonenumber: String = "",
-    val role: String = "user", // "admin" hoặc "user"
-    val listCart: List<ItemsModel> = emptyList(),
-    val listFav: List<ItemsModel> = emptyList(),
+    var listCart: Map<String, ItemsModel>? = emptyMap(),
+    var listFav: Map<String, ItemsModel>? = emptyMap()
 )

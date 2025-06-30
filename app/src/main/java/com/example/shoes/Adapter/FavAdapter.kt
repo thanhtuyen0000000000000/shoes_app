@@ -3,7 +3,6 @@ package com.example.shoes.Adapter
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +16,7 @@ import com.example.shoes.databinding.ViewholderFavBinding
 
 class FavAdapter(
     private val favList: ArrayList<ItemsModel>,
+    private val favKeyList: ArrayList<String>,  // 🔧 thêm danh sách key Firebase tương ứng
     private val context: Context,
     private val onFavChanged: (() -> Unit)? = null
 ) : RecyclerView.Adapter<FavAdapter.ViewHolder>() {
@@ -42,23 +42,24 @@ class FavAdapter(
             .apply(RequestOptions().transform(CenterCrop()))
             .into(holder.binding.pic)
 
-
-
-        // Nút xóa
+        // 🗑 Nút xóa
         holder.binding.removeFavBtn.setOnClickListener {
-            removeFromFavorites(item, position)
+            removeFromFavorites(position)
         }
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailActivity::class.java)
             intent.putExtra("object", item)
+            intent.putExtra("productId", favKeyList[position])
             holder.itemView.context.startActivity(intent)
         }
     }
 
-    private fun removeFromFavorites(item: ItemsModel, position: Int) {
-        managmentFav.removeFav(item.title) {
+    private fun removeFromFavorites(position: Int) {
+        val key = favKeyList[position]  // 🔑 Lấy key từ danh sách key
+        managmentFav.removeFav(key) {
             favList.removeAt(position)
+            favKeyList.removeAt(position)  // 🧹 đồng bộ danh sách key
             notifyItemRemoved(position)
             onFavChanged?.invoke()
             Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()

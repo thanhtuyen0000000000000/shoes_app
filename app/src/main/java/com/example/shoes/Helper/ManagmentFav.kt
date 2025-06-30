@@ -21,7 +21,8 @@ class ManagmentFav(private val context: Context) {
         return username
     }
 
-    fun insertShoe(item: ItemsModel, onDone: (() -> Unit)? = null) {
+    // ✅ Dùng productId làm key khi thêm
+    fun insertShoe(item: ItemsModel, productId: String, onDone: (() -> Unit)? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val userId = getUsername() ?: run {
@@ -31,12 +32,12 @@ class ManagmentFav(private val context: Context) {
                     }
                     return@launch
                 }
-                
-                Log.d("ManagmentFav", "Inserting favorite: ${item.title} for user: $userId")
-                val itemRef = database.child("users").child(userId).child("listFav").child(item.title)
+
+                Log.d("ManagmentFav", "Inserting favorite: ${item.title} with key $productId for user: $userId")
+                val itemRef = database.child("users").child(userId).child("listFav").child(productId)
 
                 itemRef.setValue(item).await()
-                delay(100) // Đảm bảo Firebase sync ổn định
+                delay(100)
                 Log.d("ManagmentFav", "Successfully saved favorite to Firebase")
 
                 withContext(Dispatchers.Main) {
@@ -52,11 +53,12 @@ class ManagmentFav(private val context: Context) {
         }
     }
 
-    suspend fun getListFav(): ArrayList<ItemsModel> {
+    // ✅ Trả ra cả danh sách sản phẩm và danh sách key tương ứng
+    suspend fun getListFav(): Pair<ArrayList<ItemsModel>, ArrayList<String>> {
         return suspendCancellableCoroutine { continuation ->
             val userId = getUsername() ?: run {
                 Log.e("ManagmentFav", "Username is null, returning empty favorites")
-                continuation.resume(arrayListOf())
+                continuation.resume(Pair(arrayListOf(), arrayListOf()))
                 return@suspendCancellableCoroutine
             }
 
@@ -65,14 +67,17 @@ class ManagmentFav(private val context: Context) {
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val favList = ArrayList<ItemsModel>()
+                        val keyList = ArrayList<String>()
+
                         Log.d("ManagmentFav", "Firebase snapshot exists: ${snapshot.exists()}, children count: ${snapshot.childrenCount}")
-                        
+
                         for (childSnapshot in snapshot.children) {
                             try {
                                 val item = childSnapshot.getValue(ItemsModel::class.java)
                                 if (item != null) {
                                     favList.add(item)
-                                    Log.d("ManagmentFav", "Loaded favorite: ${item.title}")
+                                    keyList.add(childSnapshot.key ?: "")
+                                    Log.d("ManagmentFav", "Loaded favorite: ${item.title} with key: ${childSnapshot.key}")
                                 } else {
                                     Log.w("ManagmentFav", "Failed to parse favorite from snapshot: ${childSnapshot.key}")
                                 }
@@ -80,8 +85,7 @@ class ManagmentFav(private val context: Context) {
                                 Log.e("ManagmentFav", "Error parsing favorite: ${e.message}")
                             }
                         }
-                        Log.d("ManagmentFav", "Total favorites loaded: ${favList.size}")
-                        continuation.resume(favList)
+                        continuation.resume(Pair(favList, keyList))
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -92,13 +96,14 @@ class ManagmentFav(private val context: Context) {
         }
     }
 
-    fun removeFav(title: String, onDone: (() -> Unit)? = null) {
+    // ✅ Xóa theo đúng Firebase key
+    fun removeFav(productId: String, onDone: (() -> Unit)? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val userId = getUsername() ?: return@launch
-                Log.d("ManagmentFav", "Removing favorite: $title for user: $userId")
-                
-                val itemRef = database.child("users").child(userId).child("listFav").child(title)
+                Log.d("ManagmentFav", "Removing favorite with key: $productId for user: $userId")
+
+                val itemRef = database.child("users").child(userId).child("listFav").child(productId)
                 itemRef.removeValue().await()
                 delay(100)
                 Log.d("ManagmentFav", "Successfully removed favorite from Firebase")
@@ -116,15 +121,16 @@ class ManagmentFav(private val context: Context) {
         }
     }
 
-    suspend fun isFavorite(title: String): Boolean {
+    // ✅ Kiểm tra yêu thích bằng Firebase key
+    suspend fun isFavorite(productId: String): Boolean {
         val userId = getUsername() ?: return false
 
         return suspendCoroutine { continuation ->
-            database.child("users").child(userId).child("listFav").child(title)
+            database.child("users").child(userId).child("listFav").child(productId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val isFav = snapshot.exists()
-                        Log.d("ManagmentFav", "Item '$title' is favorite: $isFav")
+                        Log.d("ManagmentFav", "Item with key '$productId' is favorite: $isFav")
                         continuation.resume(isFav)
                     }
 
@@ -136,4 +142,3 @@ class ManagmentFav(private val context: Context) {
         }
     }
 }
-

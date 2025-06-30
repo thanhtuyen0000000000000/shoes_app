@@ -46,6 +46,17 @@
         <activity
             android:name=".activity.AdminActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.ProductManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ProductEditActivity"
+            android:exported="false" />
+
+        <activity
+
+            android:name=".activity.UserManagementActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

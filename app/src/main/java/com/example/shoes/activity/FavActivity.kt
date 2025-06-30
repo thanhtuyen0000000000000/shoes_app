@@ -1,6 +1,5 @@
 package com.example.shoes.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoes.Adapter.FavAdapter
 import com.example.shoes.Helper.ManagmentFav
+import com.example.shoes.Model.ItemsModel
 import com.example.shoes.databinding.ActivityFavBinding
 import kotlinx.coroutines.launch
 
@@ -25,8 +25,7 @@ class FavActivity : BaseActivity() {
         managmentFav = ManagmentFav(this)
         setupRecyclerView()
         setVariable()
-        
-        // Load favorites data
+
         loadFavoritesData()
     }
 
@@ -36,8 +35,8 @@ class FavActivity : BaseActivity() {
 
     private fun setVariable() {
         binding.backBtn.setOnClickListener { finish() }
-        binding.exploreBtn?.setOnClickListener { 
-            finish() // Quay về màn hình chính để khám phá
+        binding.exploreBtn?.setOnClickListener {
+            finish()
         }
     }
 
@@ -45,15 +44,16 @@ class FavActivity : BaseActivity() {
         lifecycleScope.launch {
             try {
                 showLoading(true)
-                val favList = managmentFav.getListFav()
+
+                // ✅ Nhận cả list sản phẩm và list key
+                val (favList, favKeyList) = managmentFav.getListFav()
                 Log.d("FavActivity", "Loaded favorite items: ${favList.size}")
-                
-                // In ra thông tin từng item để debug
+
                 favList.forEachIndexed { index, item ->
                     Log.d("FavActivity", "Item $index: ${item.title}")
                 }
-                
-                initFavList(favList)
+
+                initFavList(favList, favKeyList)
             } catch (e: Exception) {
                 Log.e("FavActivity", "Error loading favorites: ${e.message}")
                 showEmptyState(true)
@@ -63,16 +63,16 @@ class FavActivity : BaseActivity() {
         }
     }
 
-    private fun initFavList(favList: ArrayList<com.example.shoes.Model.ItemsModel>) {
-        favAdapter = FavAdapter(favList, this@FavActivity) {
+    private fun initFavList(
+        favList: ArrayList<ItemsModel>,
+        favKeyList: ArrayList<String>
+    ) {
+        favAdapter = FavAdapter(favList, favKeyList, this@FavActivity) {
             refreshFavorites()
         }
-        
+
         binding.viewCart.adapter = favAdapter
-        
-        // Hiển thị empty state hoặc content dựa trên kích thước list
-        val isEmpty = favList.isEmpty()
-        showEmptyState(isEmpty)
+        showEmptyState(favList.isEmpty())
     }
 
     private fun refreshFavorites() {
@@ -87,13 +87,12 @@ class FavActivity : BaseActivity() {
     }
 
     private fun showLoading(show: Boolean) {
-        // Có thể thêm ProgressBar nếu cần
         Log.d("FavActivity", "Loading: $show")
+        // Optionally handle progress UI
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh favorites khi quay lại activity
         loadFavoritesData()
     }
 }

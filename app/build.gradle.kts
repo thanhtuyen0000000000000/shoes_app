@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     //Firebase
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 

@@ -3,6 +3,7 @@ package com.example.shoes.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.example.shoes.Model.ItemsModel
 import com.example.shoes.Model.UserModel
 import com.example.shoes.databinding.ActivityProfileBinding
 import com.google.firebase.database.FirebaseDatabase
@@ -62,26 +63,45 @@ class ProfileActivity: BaseActivity() {
 
         userRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
-                val user = snapshot.getValue(UserModel::class.java)
-                user?.let {
-                    // Update header username
-                    binding.usernameTextView.text = it.username
-                    
-                    // Update info card
-                    binding.usernameDisplayTextView.text = it.username
-                    binding.phoneTextView.text = if (it.phonenumber.isNotEmpty()) {
-                        it.phonenumber
-                    } else {
-                        "Chưa cập nhật"
-                    }
-                    
-                    // Update activity counts
-                    binding.cartInfoTextView.text = "${it.listCart.size} sản phẩm"
-                    binding.favInfoTextView.text = "${it.listFav.size} yêu thích"
+                val usernameValue = snapshot.child("username").getValue(String::class.java) ?: ""
+                val phoneValue = snapshot.child("phonenumber").getValue(String::class.java) ?: ""
+                val favSnapshot = snapshot.child("listFav")
+                val cartSnapshot = snapshot.child("listCart")
 
-                    // TODO: Nếu có avatar URL thì load bằng Glide
-                    // Glide.with(this).load(it.avatarUrl).into(binding.avatarImageView)
+                val favMap = mutableMapOf<String, ItemsModel>()
+                val cartMap = mutableMapOf<String, ItemsModel>()
+
+                favSnapshot.children.forEach {
+                    val item = it.getValue(ItemsModel::class.java)
+                    if (item != null) {
+                        favMap[it.key ?: item.title] = item
+                    }
                 }
+
+                cartSnapshot.children.forEach {
+                    val item = it.getValue(ItemsModel::class.java)
+                    if (item != null) {
+                        cartMap[it.key ?: item.title] = item
+                    }
+                }
+
+                val user = UserModel(
+                    username = usernameValue,
+                    phonenumber = phoneValue,
+                    listFav = favMap,
+                    listCart = cartMap
+                )
+
+                binding.usernameTextView.text = user.username
+                binding.usernameDisplayTextView.text = user.username
+                binding.phoneTextView.text = if (user.phonenumber.isNotEmpty()) {
+                    user.phonenumber
+                } else {
+                    "Chưa cập nhật"
+                }
+
+                binding.cartInfoTextView.text = "${user.listCart?.size ?: 0} sản phẩm"
+                binding.favInfoTextView.text = "${user.listFav?.size ?: 0} yêu thích"
             } else {
                 Toast.makeText(this, "Không tìm thấy người dùng", Toast.LENGTH_SHORT).show()
             }
@@ -89,6 +109,7 @@ class ProfileActivity: BaseActivity() {
             Toast.makeText(this, "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun logout() {
         // Clear shared preferences
@@ -98,7 +119,6 @@ class ProfileActivity: BaseActivity() {
 
         // Navigate to intro activity
         val intent = Intent(this, IntroActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

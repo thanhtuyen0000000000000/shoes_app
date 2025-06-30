@@ -45,6 +45,7 @@ class DetailActivity : BaseActivity() {
     private lateinit var managmentFav: ManagmentFav
     private lateinit var sizeAdapter: SizeAdapter
     private var selectedSize: String? = null
+    private var productId: String = ""
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,7 +115,7 @@ class DetailActivity : BaseActivity() {
     
     private fun updateFavIcon() {
         CoroutineScope(Dispatchers.Main).launch {
-            val isFav = managmentFav.isFavorite(item.title)
+            val isFav = managmentFav.isFavorite(productId)
             if (isFav) {
                 binding.favBtn.setImageResource(R.drawable.fav_icon_filled)
             } else {
@@ -474,7 +475,7 @@ class DetailActivity : BaseActivity() {
 
     private fun getBundle() {
         item = intent.getParcelableExtra("object")!!
-
+        productId = intent.getStringExtra("productId") ?: item.title
         binding.titleTxt.text = item.title
         binding.descriptionTxt.text = item.description
         binding.priceTxt.text = "$" + item.price
@@ -487,16 +488,16 @@ class DetailActivity : BaseActivity() {
             Log.d("DetailActivity", "Add to Cart button clicked")
             validateAndAddToCart()
         }
-        
+
         binding.favBtn.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                val isFav = managmentFav.isFavorite(item.title)
+                val isFav = managmentFav.isFavorite(productId)
                 if (isFav) {
-                    managmentFav.removeFav(item.title) {
+                    managmentFav.removeFav(productId) {
                         binding.favBtn.setImageResource(R.drawable.fav_icon)
                     }
                 } else {
-                    managmentFav.insertShoe(item) {
+                    managmentFav.insertShoe(item,productId) {
                         binding.favBtn.setImageResource(R.drawable.fav_icon_filled)
                     }
                 }
