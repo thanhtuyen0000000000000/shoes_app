@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="4dp"
+    card_view:cardCornerRadius="8dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginHorizontal="8dp"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Tên người đặt (chỉ hiển thị ở chế độ admin) -->
+        <TextView
+            android:id="@+id/txtUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Người đặt: tên"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txtOrderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thời gian: 01-07-2025 10:45"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/txtOrderStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái: Đang xử lý"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/txtTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng cộng: $100.00"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/txtTax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thuế: $5.00"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/txtDelivery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phí giao hàng: $3.00"
+            android:layout_marginTop="2dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerOrderDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnMarkDelivered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Đánh dấu đã giao"
+            android:visibility="gone"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

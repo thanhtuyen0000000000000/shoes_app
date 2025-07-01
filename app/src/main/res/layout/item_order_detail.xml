@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#F9F9F9"
+    android:layout_marginBottom="4dp">
+
+    <TextView
+        android:id="@+id/txtItemName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên: Giày Nike Air Max"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtItemSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Size: 42"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/txtItemQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Số lượng: 2"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/txtItemPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Giá: $50.00"
+        android:layout_marginTop="2dp"/>
+</LinearLayout>

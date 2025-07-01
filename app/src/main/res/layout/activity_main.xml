@@ -310,6 +310,7 @@
                     android:textSize="12sp"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/orderBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

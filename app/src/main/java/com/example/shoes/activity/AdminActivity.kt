@@ -36,8 +36,9 @@ class AdminActivity : BaseActivity() {
 
         // Quản lý đơn hàng
         binding.manageOrdersCard.setOnClickListener {
-            Toast.makeText(this, "Tính năng quản lý đơn hàng sẽ được phát triển", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Tính năng quản lý đơn hàng sẽ được phát triển", Toast.LENGTH_SHORT).show()
             // TODO: Chuyển đến OrderManagementActivity
+            startActivity(Intent(this, OrderManagementActivity::class.java))
         }
 
         // Thống kê

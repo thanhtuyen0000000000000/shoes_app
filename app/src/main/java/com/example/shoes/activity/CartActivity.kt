@@ -1,5 +1,5 @@
 package com.example.shoes.activity
-
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -154,15 +154,36 @@ class CartActivity : BaseActivity() {
     }
 
     private fun setVariable() {
+
         try {
             Log.d("CartActivity", "Setting up click listeners")
-            binding.backBtn.setOnClickListener { 
+            binding.backBtn.setOnClickListener {
                 Log.d("CartActivity", "Back button clicked")
-                finish() 
+                finish()
             }
-            binding.shopNowBtn?.setOnClickListener { 
+            binding.shopNowBtn?.setOnClickListener {
                 Log.d("CartActivity", "Shop now button clicked")
                 finish() // Quay về màn hình chính để mua sắm
+            }
+            binding.checkoutBtn.setOnClickListener {
+                lifecycleScope.launch {
+                Log.d("CartActivity", "Checkout button clicked")
+
+                val cartList = managmentCart.getListCart()
+
+                // Chuyển sang OrderActivity và truyền dữ liệu
+                val intent = Intent(this@CartActivity, OrderActivity::class.java)
+                intent.putParcelableArrayListExtra("cartList", cartList)
+                intent.putExtra("total", binding.totalTxt.text.toString())
+                intent.putExtra("tax", binding.taxTxt.text.toString())
+                intent.putExtra("delivery", binding.deliveryTxt.text.toString())
+
+                startActivity(intent)
+
+                // Xóa giỏ hàng sau khi thanh toán
+                managmentCart.clearCart()
+                finish()
+            }
             }
         } catch (e: Exception) {
             Log.e("CartActivity", "Error setting up variables: ${e.message}")

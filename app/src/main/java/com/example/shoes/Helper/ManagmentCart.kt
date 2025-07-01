@@ -246,6 +246,26 @@ class ManagmentCart(val context: Context) {
             }
         }
     }
+    fun clearCart(onDone: (() -> Unit)? = null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userId = getUsername() ?: return@launch
+                database.child("users").child(userId).child("listCart").removeValue().await()
+                Log.d("ManagmentCart", "Cart cleared successfully")
+
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Đã xóa giỏ hàng", Toast.LENGTH_SHORT).show()
+                    onDone?.invoke()
+                }
+            } catch (e: Exception) {
+                Log.e("ManagmentCart", "Error clearing cart: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Lỗi khi xóa giỏ hàng: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
 
     suspend fun getTotalFee(): Double {
         val listShoe = getListCart()

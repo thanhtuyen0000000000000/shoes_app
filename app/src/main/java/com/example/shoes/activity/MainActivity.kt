@@ -143,6 +143,15 @@ class MainActivity : AppCompatActivity() {
                 Log.e("MainActivity", "Error opening ProfileActivity: ${e.message}")
             }
         }
+        binding.orderBtn.setOnClickListener{
+            try {
+                Log.d("MainActivity", "Order button clicked")
+                val intent = Intent(this, OrderActivity::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error opening OrderActivity: ${e.message}")
+            }
+        }
     }
 
     private fun initBanner(){

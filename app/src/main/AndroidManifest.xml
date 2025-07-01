@@ -57,6 +57,12 @@
 
             android:name=".activity.UserManagementActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.OrderActivity"
+            android:exported="false" />
+        <activity android:name=".activity.OrderManagementActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
