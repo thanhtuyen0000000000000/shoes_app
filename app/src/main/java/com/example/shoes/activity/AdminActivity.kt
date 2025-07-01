@@ -43,8 +43,10 @@ class AdminActivity : BaseActivity() {
 
         // Thống kê
         binding.statisticsCard.setOnClickListener {
-            Toast.makeText(this, "Tính năng thống kê sẽ được phát triển", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Tính năng thống kê sẽ được phát triển", Toast.LENGTH_SHORT).show()
             // TODO: Chuyển đến StatisticsActivity
+
+            startActivity(Intent(this, StatisticActivity::class.java))
         }
 
         // Quản lý người dùng

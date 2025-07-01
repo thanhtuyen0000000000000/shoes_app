@@ -480,6 +480,7 @@ class DetailActivity : BaseActivity() {
         binding.descriptionTxt.text = item.description
         binding.priceTxt.text = "$" + item.price
         binding.ratingTxt.text = "${item.rating} Rating"
+        binding.brandTxt.text = item.brand
 
         updateFavIcon()
 

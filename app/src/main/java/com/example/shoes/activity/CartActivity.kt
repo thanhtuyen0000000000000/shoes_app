@@ -173,6 +173,7 @@ class CartActivity : BaseActivity() {
 
                 // Chuyển sang OrderActivity và truyền dữ liệu
                 val intent = Intent(this@CartActivity, OrderActivity::class.java)
+
                 intent.putParcelableArrayListExtra("cartList", cartList)
                 intent.putExtra("total", binding.totalTxt.text.toString())
                 intent.putExtra("tax", binding.taxTxt.text.toString())

@@ -15,6 +15,7 @@ import com.example.shoes.Adapter.BrandAdapter
 import com.example.shoes.Adapter.PopularAdapter
 import com.example.shoes.Model.SliderModel
 import com.example.shoes.Adapter.SliderAdapter
+import com.example.shoes.Model.ItemsModel
 import com.example.shoes.ViewModel.MainViewModel
 import com.example.shoes.databinding.ActivityMainBinding
 import com.google.firebase.database.FirebaseDatabase
@@ -22,7 +23,8 @@ import com.google.firebase.database.FirebaseDatabase
 class MainActivity : AppCompatActivity() {
     private val viewModel=MainViewModel()
     private lateinit var binding: ActivityMainBinding
-    
+    private val allPopularItems = mutableListOf<ItemsModel>()
+    private var selectedBrand: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
@@ -183,24 +185,67 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    private fun initBrand(){
-        binding.progressBarBrand.visibility= View.VISIBLE
-        viewModel.brands.observe(this, Observer { items ->
-            binding.viewBrand.layoutManager=
-                LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
-            binding.viewBrand.adapter=BrandAdapter(items)
+//    private fun initBrand(){
+//        binding.progressBarBrand.visibility= View.VISIBLE
+//        viewModel.brands.observe(this, Observer { items ->
+//            binding.viewBrand.layoutManager=
+//                LinearLayoutManager(this@MainActivity,LinearLayoutManager.HORIZONTAL,false)
+//            binding.viewBrand.adapter=BrandAdapter(items)
+//            binding.progressBarBrand.visibility = View.GONE
+//        })
+//        viewModel.loadBrand()
+//    }
+
+    private fun initBrand() {
+        binding.progressBarBrand.visibility = View.VISIBLE
+
+        viewModel.brands.observe(this) { items ->
+            binding.viewBrand.layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+
+            // ✅ Truyền callback khi chọn brand
+            binding.viewBrand.adapter = BrandAdapter(items.toMutableList()) { selectedBrand ->
+                filterPopularByBrand(selectedBrand)
+            }
+
             binding.progressBarBrand.visibility = View.GONE
-        })
+        }
+
         viewModel.loadBrand()
     }
 
-    private fun initPopular(){
-        binding.progressBarPopular.visibility= View.VISIBLE
-        viewModel.populars.observe(this, Observer { items ->
-            binding.viewPopular.layoutManager = GridLayoutManager(this@MainActivity,2)
-            binding.viewPopular.adapter= PopularAdapter(items)
+    private fun filterPopularByBrand(brand: String?) {
+        selectedBrand = brand
+        val filteredItems = if (brand == null) {
+            allPopularItems
+        } else {
+            allPopularItems.filter { it.brand.equals(brand, ignoreCase = true) }
+        }
+        binding.viewPopular.adapter = PopularAdapter(filteredItems.toMutableList())
+    }
+
+    private fun initPopular() {
+        binding.progressBarPopular.visibility = View.VISIBLE
+        viewModel.populars.observe(this) { items ->
+            allPopularItems.clear()
+            allPopularItems.addAll(items)
+
+            binding.viewPopular.layoutManager = GridLayoutManager(this@MainActivity, 2)
+            binding.viewPopular.adapter = PopularAdapter(items)
+
             binding.progressBarPopular.visibility = View.GONE
-        })
+        }
+
         viewModel.loadPopular()
     }
+
+//    private fun initPopular(){
+//        binding.progressBarPopular.visibility= View.VISIBLE
+//        viewModel.populars.observe(this, Observer { items ->
+//            binding.viewPopular.layoutManager = GridLayoutManager(this@MainActivity,2)
+//            binding.viewPopular.adapter= PopularAdapter(items)
+//            binding.progressBarPopular.visibility = View.GONE
+//        })
+//        viewModel.loadPopular()
+//    }
 }

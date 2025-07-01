@@ -13,6 +13,8 @@ import com.example.shoes.databinding.ActivityProductEditBinding
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
+import androidx.activity.viewModels
+import com.example.shoes.ViewModel.MainViewModel
 
 class ProductEditActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProductEditBinding
@@ -21,6 +23,7 @@ class ProductEditActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var productKey: String? = null
     private var existingItem: ItemsModel? = null
+    private val mainViewModel: MainViewModel by viewModels()
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -41,14 +44,24 @@ class ProductEditActivity : AppCompatActivity() {
         existingItem = intent.getParcelableExtra<ItemsModel>("PRODUCT_ITEM")
 
         setupUI()
+        mainViewModel.loadBrand()
+        observeBrandData()
         setupClickListeners()
+    }
+    private fun observeBrandData() {
+        mainViewModel.brands.observe(this) { brandList ->
+            val brandTitles = brandList.map { it.title }
+            val brandAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, brandTitles)
+            binding.productBrandDropdown.setAdapter(brandAdapter)
+
+            // Gán lại brand nếu đang sửa
+            existingItem?.let {
+                binding.productBrandDropdown.setText(it.brand, false)
+            }
+        }
     }
 
     private fun setupUI() {
-        val brands = listOf("Nike", "Adidas", "Puma", "Vans", "Converse", "New Balance")
-        val brandAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, brands)
-        binding.productBrandDropdown.setAdapter(brandAdapter)
-
         existingItem?.let { item ->
             binding.productTitleEditText.setText(item.title)
             binding.productDescriptionEditText.setText(item.description)

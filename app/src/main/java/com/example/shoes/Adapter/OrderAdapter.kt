@@ -1,36 +1,3 @@
-//package com.example.shoes.Adapter
-//
-//import android.view.LayoutInflater
-//import android.view.ViewGroup
-//import androidx.recyclerview.widget.LinearLayoutManager
-//import androidx.recyclerview.widget.RecyclerView
-//import com.example.shoes.Model.OrderModel
-//import com.example.shoes.databinding.ItemOrderBinding
-//
-//class OrderAdapter(private val orders: List<OrderModel>) :
-//    RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
-//
-//    inner class OrderViewHolder(val binding: ItemOrderBinding) : RecyclerView.ViewHolder(binding.root)
-//
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
-//        val binding = ItemOrderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return OrderViewHolder(binding)
-//    }
-//
-//    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-//        val order = orders[position]
-//        holder.binding.apply {
-//            txtOrderTime.text = order.timestamp
-//            txtOrderStatus.text = order.status
-//            txtTotal.text = "Tổng cộng: $${order.total}"
-//            recyclerOrderDetail.layoutManager = LinearLayoutManager(holder.itemView.context)
-//            recyclerOrderDetail.adapter = OrderDetailAdapter(order.items)
-//        }
-//    }
-//
-//    override fun getItemCount(): Int = orders.size
-//}
-
 
 package com.example.shoes.Adapter
 
