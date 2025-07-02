@@ -85,6 +85,11 @@ class ProductEditActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        // Back button listener
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+
         binding.selectImageButton.setOnClickListener {
             getContent.launch("image/*")
         }

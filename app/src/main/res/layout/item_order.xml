@@ -195,8 +195,12 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             android:background="#F8F9FA"
-            android:padding="8dp"
-            android:visibility="gone" />
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="8dp"
+            android:visibility="gone"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:overScrollMode="never" />
 
         <!-- Admin Button -->
         <androidx.cardview.widget.CardView

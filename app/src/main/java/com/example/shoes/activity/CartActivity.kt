@@ -90,7 +90,9 @@ class CartActivity : BaseActivity() {
             cartAdapter = CartAdapter(cartList, this@CartActivity, object : ChangeNumberItemsListener {
                 override fun onChanged() {
                     lifecycleScope.launch {
-                        calculateCart()
+                        // Refresh cart data để đảm bảo UI sync với database sau khi có thay đổi
+                        Log.d("CartActivity", "Cart items changed, refreshing...")
+                        refreshCartAfterChange()
                     }
                 }
             })
@@ -98,12 +100,12 @@ class CartActivity : BaseActivity() {
             binding.viewCart.adapter = cartAdapter
             Log.d("CartActivity", "CartAdapter set successfully")
             
-            // Hiển thị empty state hoặc content dựa trên kích thước list
-            val isEmpty = cartList.isEmpty()
-            showEmptyState(isEmpty)
-            
-            if (!isEmpty) {
-                calculateCart()
+            // Sử dụng logic kiểm tra empty state mới thay vì chỉ kiểm tra isEmpty()
+            if (cartList.isNotEmpty()) {
+                calculateCart() // calculateCart() sẽ gọi checkAndUpdateEmptyState()
+            } else {
+                // Nếu cart trống hoàn toàn, hiển thị empty state ngay lập tức
+                showEmptyState(true)
             }
         } catch (e: Exception) {
             Log.e("CartActivity", "Error initializing cart list: ${e.message}", e)
@@ -147,8 +149,49 @@ class CartActivity : BaseActivity() {
                     deliveryTxt.text = "$$delivery"
                     totalTxt.text = "$$total"
                 }
+                
+                // Kiểm tra và cập nhật empty state sau khi tính toán
+                checkAndUpdateEmptyState()
             } catch (e: Exception) {
                 Log.e("CartActivity", "Error calculating cart: ${e.message}")
+            }
+        }
+    }
+    
+    /**
+     * Kiểm tra và cập nhật trạng thái empty state dựa trên:
+     * 1. Số lượng items trong cart
+     * 2. Subtotal và Tax đều bằng 0
+     */
+    private fun checkAndUpdateEmptyState() {
+        lifecycleScope.launch {
+            try {
+                val cartList = managmentCart.getListCart()
+                val totalFee = managmentCart.getTotalFee()
+                
+                // Tính tổng số lượng items
+                var totalQuantity = 0
+                for (item in cartList) {
+                    totalQuantity += item.numberInCart
+                }
+                
+                Log.d("CartActivity", "Empty state check - Cart size: ${cartList.size}, Total quantity: $totalQuantity, Total fee: $totalFee, Tax: $tax")
+                
+                // Điều kiện để hiển thị empty state:
+                // 1. Cart không có items hoặc tổng quantity = 0
+                // 2. Hoặc cả Subtotal và Tax đều bằng 0
+                val shouldShowEmpty = cartList.isEmpty() || totalQuantity == 0 || (totalFee == 0.0 && tax == 0.0)
+                
+                Log.d("CartActivity", "Should show empty state: $shouldShowEmpty")
+                showEmptyState(shouldShowEmpty)
+                
+                // Nếu cart trống, cập nhật adapter
+                if (shouldShowEmpty && ::cartAdapter.isInitialized) {
+                    cartAdapter.notifyDataSetChanged()
+                }
+            } catch (e: Exception) {
+                Log.e("CartActivity", "Error checking empty state: ${e.message}")
+                showEmptyState(true) // Fallback to empty state nếu có lỗi
             }
         }
     }
@@ -199,6 +242,37 @@ class CartActivity : BaseActivity() {
             loadCartData()
         } catch (e: Exception) {
             Log.e("CartActivity", "Error in onResume: ${e.message}")
+        }
+    }
+
+    /**
+     * Refresh cart data sau khi có thay đổi từ plus/minus operations
+     * Cần refresh để đảm bảo adapter sync với database (khi items bị remove)
+     */
+    private fun refreshCartAfterChange() {
+        lifecycleScope.launch {
+            try {
+                val updatedCartList = managmentCart.getListCart()
+                Log.d("CartActivity", "Refreshed cart - Current size: ${updatedCartList.size}")
+                
+                // Recreate adapter với fresh data để đảm bảo sync
+                cartAdapter = CartAdapter(updatedCartList, this@CartActivity, object : ChangeNumberItemsListener {
+                    override fun onChanged() {
+                        lifecycleScope.launch {
+                            // Refresh cart data để đảm bảo UI sync với database sau khi có thay đổi
+                            Log.d("CartActivity", "Cart items changed, refreshing...")
+                            refreshCartAfterChange()
+                        }
+                    }
+                })
+                binding.viewCart.adapter = cartAdapter
+                
+                // Recalculate totals và check empty state
+                calculateCart()
+            } catch (e: Exception) {
+                Log.e("CartActivity", "Error refreshing cart: ${e.message}")
+                showEmptyState(true)
+            }
         }
     }
 }
