@@ -45,6 +45,7 @@ class DetailActivity : BaseActivity() {
     private lateinit var managmentFav: ManagmentFav
     private lateinit var sizeAdapter: SizeAdapter
     private var selectedSize: String? = null
+    private var selectedColor: String? = null
     private var productId: String = ""
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,6 +93,8 @@ class DetailActivity : BaseActivity() {
 
         binding.colorList.adapter = ColorAdapter(colorList) { selectedPosition ->
             binding.slider.setCurrentItem(selectedPosition, true)
+            selectedColor = colorList[selectedPosition]
+            Log.d("DetailActivity", "Color selected: $selectedColor at position $selectedPosition")
         }
         binding.colorList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
     }
@@ -247,7 +250,28 @@ class DetailActivity : BaseActivity() {
                 Log.d("DetailActivity", "Updated sizes: ${cartItem.size}")
                 Log.d("DetailActivity", "First size (should be selected): ${cartItem.size[0]}")
             }
-            
+
+            // Nếu đã chọn màu, cập nhật vào đầu danh sách ảnh
+            selectedColor?.let { chosenColor ->
+                Log.d("DetailActivity", "Original colors (picUrls): ${item.picUrl}")
+                Log.d("DetailActivity", "Chosen color: $chosenColor")
+
+                val updatedColors = ArrayList<String>()
+                updatedColors.add(chosenColor)
+
+                item.picUrl.forEach { url ->
+                    if (url != chosenColor) {
+                        updatedColors.add(url)
+                    }
+                }
+                cartItem.picUrl = updatedColors
+
+                Log.d("DetailActivity", "Updated picUrls: ${cartItem.picUrl}")
+                Log.d(
+                    "DetailActivity",
+                    "First picUrl (should match chosen color): ${cartItem.picUrl[0]}"
+                )
+            }
             managmentCart.insertShoe(cartItem) {
                 Log.d("DetailActivity", "Successfully added to cart")
                 // Hiển thị thông báo thành công với size đã chọn

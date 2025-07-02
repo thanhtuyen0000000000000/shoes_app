@@ -49,6 +49,7 @@ class OrderManagementActivity : AppCompatActivity() {
                 for (userSnap in snapshot.children) {
                     val userId = userSnap.key ?: continue
                     val ordersSnap = userSnap.child("listOrders")
+                    Log.d("OrderDebug", "UserID: $userId - Total Orders: ${ordersSnap.childrenCount}")
                     val username = userSnap.child("username").getValue(String::class.java) ?: getString(R.string.unknown_user)
                     for (orderSnap in ordersSnap.children) {
                         val order = orderSnap.getValue(OrderModel::class.java)

@@ -64,6 +64,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // Chuyển về trang đăng nhập
         binding.loginLinkText.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
             finish() // Quay lại LoginActivity
         }
     }

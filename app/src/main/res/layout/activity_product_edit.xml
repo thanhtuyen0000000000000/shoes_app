@@ -54,7 +54,8 @@
             android:id="@+id/productBrandDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:importantForAccessibility="no" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -69,12 +70,12 @@
         android:hint="Sizes (comma-separated)"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/productImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/imageSlider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center" />
 
     <Button
         android:id="@+id/selectImageButton"
