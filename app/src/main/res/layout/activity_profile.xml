@@ -37,7 +37,7 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Trang cá nhân"
+                android:text="Profile"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
@@ -129,7 +129,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thông tin cá nhân"
+                        android:text="Personal information"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/purple"
@@ -141,19 +141,12 @@
                         android:orientation="horizontal"
                         android:layout_marginBottom="12dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_avatar_placeholder"
-                            android:layout_marginEnd="12dp"
-                            android:layout_gravity="center_vertical" />
-
                         <TextView
                             android:id="@+id/usernameDisplayTextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Tên người dùng"
+                            android:text="Username"
                             android:textSize="16sp"
                             android:textColor="@color/darkGrey" />
 
@@ -164,19 +157,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/btn_3"
-                            android:layout_marginEnd="12dp"
-                            android:layout_gravity="center_vertical" />
-
                         <TextView
                             android:id="@+id/phoneTextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Số điện thoại"
+                            android:text="Phone number"
                             android:textSize="16sp"
                             android:textColor="@color/darkGrey" />
 
@@ -203,7 +189,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hoạt động"
+                        android:text="Activity"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/purple"
@@ -228,18 +214,12 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground">
 
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/btn_1"
-                                android:layout_marginBottom="8dp" />
-
                             <TextView
                                 android:id="@+id/cartInfoTextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 sản phẩm"
-                                android:textSize="12sp"
+                                android:text="0 products"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/purple"
                                 android:gravity="center" />
@@ -260,18 +240,12 @@
                             android:focusable="true"
                             android:foreground="?android:attr/selectableItemBackground">
 
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/fav_icon"
-                                android:layout_marginBottom="8dp" />
-
                             <TextView
                                 android:id="@+id/favInfoTextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0 yêu thích"
-                                android:textSize="12sp"
+                                android:text="0 favorites"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/purple"
                                 android:gravity="center" />
@@ -298,7 +272,7 @@
                     android:background="@drawable/profile_card_bg">
 
                     <LinearLayout
-                        android:id="@+id/changePasswordBtn"
+                        android:id="@+id/settingsBtn"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:orientation="horizontal"
@@ -308,17 +282,11 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/btn_5"
-                            android:layout_marginEnd="16dp" />
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Đổi mật khẩu"
+                            android:text="Change Password"
                             android:textSize="16sp"
                             android:textColor="@color/darkGrey" />
 
@@ -333,7 +301,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginStart="60dp"
+                        android:layout_marginStart="20dp"
                         android:background="@color/lightGrey" />
 
                     <LinearLayout
@@ -347,18 +315,11 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/back"
-                            android:layout_marginEnd="16dp"
-                            android:rotation="180" />
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Đăng xuất"
+                            android:text="Logout"
                             android:textSize="16sp"
                             android:textColor="@color/darkGrey" />
 

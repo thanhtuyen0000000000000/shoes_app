@@ -1,10 +1,16 @@
 package com.example.shoes.activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.edit
 import com.example.shoes.Model.ItemsModel
 import com.example.shoes.Model.UserModel
+import com.example.shoes.R
 import com.example.shoes.databinding.ActivityProfileBinding
 import com.google.firebase.database.FirebaseDatabase
 
@@ -19,7 +25,7 @@ class ProfileActivity: BaseActivity() {
         val username = getSharedPreferences("MyAppPrefs", MODE_PRIVATE).getString("username", null)
 
         if (username == null) {
-            Toast.makeText(this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -34,10 +40,9 @@ class ProfileActivity: BaseActivity() {
             finish()
         }
 
-        // Change password
-        binding.changePasswordBtn.setOnClickListener {
-            Toast.makeText(this, "Chức năng đổi mật khẩu sẽ được phát triển", Toast.LENGTH_SHORT).show()
-            // TODO: Implement change password functionality
+        // Change password (using settings button)
+        binding.settingsBtn.setOnClickListener {
+            showChangePasswordDialog()
         }
 
         // Logout
@@ -45,13 +50,13 @@ class ProfileActivity: BaseActivity() {
             logout()
         }
 
-        // Cart info - click vào layout thay vì textview
+        // Cart info - click on layout instead of textview
         binding.cartInfoLayout.setOnClickListener {
             val intent = Intent(this, CartActivity::class.java)
             startActivity(intent)
         }
 
-        // Favorite info - click vào layout thay vì textview  
+        // Favorite info - click on layout instead of textview  
         binding.favInfoLayout.setOnClickListener {
             val intent = Intent(this, FavActivity::class.java)
             startActivity(intent)
@@ -97,25 +102,116 @@ class ProfileActivity: BaseActivity() {
                 binding.phoneTextView.text = if (user.phonenumber.isNotEmpty()) {
                     user.phonenumber
                 } else {
-                    "Chưa cập nhật"
+                    getString(R.string.not_updated)
                 }
 
-                binding.cartInfoTextView.text = "${user.listCart?.size ?: 0} sản phẩm"
-                binding.favInfoTextView.text = "${user.listFav?.size ?: 0} yêu thích"
+                binding.cartInfoTextView.text = getString(R.string.items_in_cart, user.listCart?.size ?: 0)
+                binding.favInfoTextView.text = getString(R.string.items_in_favorites, user.listFav?.size ?: 0)
             } else {
-                Toast.makeText(this, "Không tìm thấy người dùng", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener {
-            Toast.makeText(this, "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_occurred, it.message), Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun showChangePasswordDialog() {
+        val username = getSharedPreferences("MyAppPrefs", MODE_PRIVATE).getString("username", null)
+        if (username == null) {
+            Toast.makeText(this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Change Password")
+
+        // Create layout for dialog
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(50, 40, 50, 10)
+
+        // Current password input
+        val currentPasswordInput = EditText(this)
+        currentPasswordInput.hint = "Current Password"
+        currentPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        layout.addView(currentPasswordInput)
+
+        // New password input
+        val newPasswordInput = EditText(this)
+        newPasswordInput.hint = "New Password"
+        newPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        layout.addView(newPasswordInput)
+
+        // Confirm password input
+        val confirmPasswordInput = EditText(this)
+        confirmPasswordInput.hint = "Confirm New Password"
+        confirmPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        layout.addView(confirmPasswordInput)
+
+        builder.setView(layout)
+
+        builder.setPositiveButton("Change Password") { dialog, _ ->
+            val currentPassword = currentPasswordInput.text.toString().trim()
+            val newPassword = newPasswordInput.text.toString().trim()
+            val confirmPassword = confirmPasswordInput.text.toString().trim()
+
+            if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            if (newPassword != confirmPassword) {
+                Toast.makeText(this, "New passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            if (newPassword.length < 6) {
+                Toast.makeText(this, "New password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                return@setPositiveButton
+            }
+
+            changePassword(username, currentPassword, newPassword)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    private fun changePassword(username: String, currentPassword: String, newPassword: String) {
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(username)
+
+        // Check current password
+        userRef.child("password").get().addOnSuccessListener { snapshot ->
+            val storedPassword = snapshot.getValue(String::class.java)
+            
+            if (storedPassword == currentPassword) {
+                // Current password is correct, update with new password
+                userRef.child("password").setValue(newPassword)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Password changed successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, "Error: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(this, "Error checking password: ${exception.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun logout() {
-        // Clear shared preferences
-        getSharedPreferences("MyAppPrefs", MODE_PRIVATE).edit().clear().apply()
+        // Clear shared preferences using KTX extension
+        getSharedPreferences("MyAppPrefs", MODE_PRIVATE).edit {
+            clear()
+        }
         
-        Toast.makeText(this, "Đã đăng xuất thành công", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.logout_success), Toast.LENGTH_SHORT).show()
 
         // Navigate to intro activity
         val intent = Intent(this, IntroActivity::class.java)

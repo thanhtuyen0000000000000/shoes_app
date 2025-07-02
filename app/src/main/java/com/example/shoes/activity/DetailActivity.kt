@@ -77,7 +77,7 @@ class DetailActivity : BaseActivity() {
                 Log.d("DetailActivity", "============================")
                 
                 // Hiển thị thông báo size đã chọn
-                Toast.makeText(this@DetailActivity, "Đã chọn size: $size", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DetailActivity, getString(R.string.size_selected, size), Toast.LENGTH_SHORT).show()
             }
         })
         
@@ -138,13 +138,13 @@ class DetailActivity : BaseActivity() {
     
     private fun showSizeSelectionDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("⚠️ Chọn kích thước")
-        builder.setMessage("Vui lòng chọn kích thước sản phẩm trước khi thêm vào giỏ hàng.\n\nKích thước có sẵn: ${item.size.joinToString(", ")}")
+        builder.setTitle(getString(R.string.size_required))
+        builder.setMessage(getString(R.string.size_required_message, item.size.joinToString(", ")))
         
         // Sử dụng icon warning thay vì shoes
         builder.setIcon(android.R.drawable.ic_dialog_alert)
         
-        builder.setPositiveButton("Chọn ngay") { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.select_now)) { dialog, _ ->
             dialog.dismiss()
             // Scroll đến phần size selection để user dễ thấy
             binding.sizeList.smoothScrollToPosition(0)
@@ -153,7 +153,7 @@ class DetailActivity : BaseActivity() {
             highlightSizeSelection()
         }
         
-        builder.setNegativeButton("Hủy") { dialog, _ ->
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
         
@@ -202,7 +202,7 @@ class DetailActivity : BaseActivity() {
             .start()
             
         // Hiển thị toast hướng dẫn với emoji và vibration nếu có
-        Toast.makeText(this, "👆 Hãy chọn kích thước ở phía trên", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.please_select_size), Toast.LENGTH_LONG).show()
         
         // Thêm haptic feedback nếu có
         try {
@@ -219,7 +219,7 @@ class DetailActivity : BaseActivity() {
             
             // Validation bổ sung
             if (selectedSize.isNullOrEmpty()) {
-                Toast.makeText(this, " Lỗi: Không xác định được size đã chọn", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_size_selection), Toast.LENGTH_SHORT).show()
                 return
             }
             
@@ -256,7 +256,7 @@ class DetailActivity : BaseActivity() {
             
         } catch (e: Exception) {
             Log.e("DetailActivity", "Error adding to cart: ${e.message}")
-            Toast.makeText(this, "❌ Lỗi khi thêm vào giỏ hàng: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_add_to_cart, e.message), Toast.LENGTH_SHORT).show()
         }
     }
     

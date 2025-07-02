@@ -27,9 +27,17 @@ class ProductManagementActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
 
+        setupUI()
         setupRecyclerView()
         setupClickListeners()
         loadProducts()
+    }
+
+    private fun setupUI() {
+        // Back button functionality
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -51,6 +59,12 @@ class ProductManagementActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        // Updated to use the new card design
+        binding.addProductCard.setOnClickListener {
+            startActivity(Intent(this, ProductEditActivity::class.java))
+        }
+        
+        // Also keep the button click for backwards compatibility
         binding.addProductButton.setOnClickListener {
             startActivity(Intent(this, ProductEditActivity::class.java))
         }

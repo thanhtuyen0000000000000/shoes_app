@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoes.Adapter.StatisticAdapter
 import com.example.shoes.Model.OrderModel
 import com.example.shoes.Model.StatisticModel
+import com.example.shoes.R
 import com.example.shoes.databinding.ActivityStatisticBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
@@ -25,10 +26,21 @@ class StatisticActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance().reference
 
+        setupUI()
+        setupRecyclerView()
+        loadStatistics()
+    }
+
+    private fun setupUI() {
+        // Back button functionality
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupRecyclerView() {
         binding.recyclerViewStatistic.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewStatistic.adapter = StatisticAdapter(statisticList)
-
-        loadStatistics()
     }
 
     private fun loadStatistics() {
@@ -40,7 +52,7 @@ class StatisticActivity : AppCompatActivity() {
                     val ordersSnap = userSnap.child("listOrders")
                     for (orderSnap in ordersSnap.children) {
                         val order = orderSnap.getValue(OrderModel::class.java)
-                        if (order != null && order.status == "Đã giao") {
+                        if (order != null && order.status == "Delivered") {
                             for (item in order.items) {
                                 val key = item.title.trim().lowercase()
                                 val stat = productStats[key] ?: StatisticModel(
@@ -80,7 +92,7 @@ class StatisticActivity : AppCompatActivity() {
             labels.add(stat.productName)
         }
 
-        val dataSet = BarDataSet(entries, "Số lượng đã bán")
+        val dataSet = BarDataSet(entries, getString(R.string.quantity_sold, 0).replace(": 0", ""))
         dataSet.color = resources.getColor(android.R.color.holo_blue_light, theme)
 
         val barData = BarData(dataSet)
@@ -105,6 +117,6 @@ class StatisticActivity : AppCompatActivity() {
 
     private fun updateTotalRevenue(statistics: List<StatisticModel>) {
         val totalRevenue = statistics.sumOf { it.revenue }
-        binding.totalRevenueTextView.text = "Tổng doanh thu: $%.2f".format(totalRevenue)
+        binding.totalRevenueTextView.text = getString(R.string.total_revenue, totalRevenue)
     }
 }

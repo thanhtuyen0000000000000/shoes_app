@@ -254,13 +254,13 @@ class ManagmentCart(val context: Context) {
                 Log.d("ManagmentCart", "Cart cleared successfully")
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Đã xóa giỏ hàng", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Cart cleared", Toast.LENGTH_SHORT).show()
                     onDone?.invoke()
                 }
             } catch (e: Exception) {
                 Log.e("ManagmentCart", "Error clearing cart: ${e.message}")
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Lỗi khi xóa giỏ hàng: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error clearing cart: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

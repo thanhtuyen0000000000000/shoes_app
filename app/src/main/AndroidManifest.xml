@@ -66,6 +66,9 @@
         <activity android:name=".activity.StatisticActivity"
             android:exported="false"/>
 
+        <activity android:name=".activity.SearchActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

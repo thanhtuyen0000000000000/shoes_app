@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.shoes.R
 import com.example.shoes.databinding.ActivityLoginBinding
 import com.google.firebase.database.FirebaseDatabase
 
@@ -21,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
 
             // Kiểm tra rỗng
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập tên và mật khẩu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_enter_credentials), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -37,7 +38,7 @@ class LoginActivity : AppCompatActivity() {
                         if (password == storedPassword) {
 
                             
-                            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_SHORT).show()
 
                             val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
                             sharedPref.edit()
@@ -57,20 +58,20 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(this, "Sai mật khẩu", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, getString(R.string.incorrect_password), Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this, "Tên người dùng không tồn tại", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.username_not_exist), Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this, "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.error_occurred, it.message), Toast.LENGTH_SHORT).show()
                 }
         }
 
         // Bạn có thể xử lý quên mật khẩu ở đây nếu cần
         binding.forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Tính năng sẽ được phát triển", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.feature_in_development), Toast.LENGTH_SHORT).show()
         }
 
         // Chuyển đến trang đăng ký

@@ -3,7 +3,9 @@ package com.example.shoes.Adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.shoes.Model.ItemsModel
+import com.example.shoes.R
 import com.example.shoes.databinding.ItemOrderDetailBinding
 
 class OrderDetailAdapter(private val items: List<ItemsModel>) :
@@ -18,11 +20,41 @@ class OrderDetailAdapter(private val items: List<ItemsModel>) :
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         val item = items[position]
+        val context = holder.itemView.context
+        
         holder.binding.apply {
+            // Product name
             txtItemName.text = item.title
-            txtItemSize.text = "Size: ${if (item.size.isNotEmpty()) item.size[0] else "N/A"}"
-            txtItemQuantity.text = "Số lượng: ${item.numberInCart}"
-            txtItemPrice.text = "Giá: $${item.price}"
+            
+            // Size
+            val sizeText = if (item.size.isNotEmpty()) {
+                context.getString(R.string.size_format, item.size[0])
+            } else {
+                context.getString(R.string.size_format, "N/A")
+            }
+            txtItemSize.text = sizeText
+            
+            // Quantity
+            txtItemQuantity.text = context.getString(R.string.qty_format, item.numberInCart)
+            
+            // Price per item
+            txtItemPrice.text = context.getString(R.string.order_total, item.price)
+            
+            // Subtotal (price * quantity)
+            val subtotal = item.price * item.numberInCart
+            txtItemSubtotal.text = context.getString(R.string.subtotal_format, subtotal)
+            
+            // Product image
+            if (item.picUrl.isNotEmpty()) {
+                Glide.with(context)
+                    .load(item.picUrl[0])
+                    .placeholder(R.drawable.shoes)
+                    .error(R.drawable.shoes)
+                    .centerCrop()
+                    .into(imgProduct)
+            } else {
+                imgProduct.setImageResource(R.drawable.shoes)
+            }
         }
     }
 

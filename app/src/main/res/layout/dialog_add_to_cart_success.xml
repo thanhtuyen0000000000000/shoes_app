@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Thêm vào giỏ hàng thành công!"
+        android:text="Add to cart successfully!"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/purple"
@@ -107,7 +107,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Kích thước: "
+                        android:text="Size: "
                         android:textSize="12sp"
                         android:textColor="@color/grey" />
 
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Tiếp tục mua sắm"
+                android:text="Continue shopping"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
@@ -197,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Xem giỏ hàng"
+                android:text="View cart"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"

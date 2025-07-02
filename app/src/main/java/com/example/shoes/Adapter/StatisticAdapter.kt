@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoes.Model.StatisticModel
+import com.example.shoes.R
 import com.example.shoes.databinding.ItemStatisticBinding
 
 class StatisticAdapter(private val stats: List<StatisticModel>) :
@@ -20,8 +21,8 @@ class StatisticAdapter(private val stats: List<StatisticModel>) :
         val item = stats[position]
         holder.binding.apply {
             txtProductName.text = item.productName
-            txtQuantitySold.text = "Số lượng đã bán: ${item.quantitySold}"
-            txtRevenue.text = "Doanh thu: $${item.revenue}"
+            txtQuantitySold.text = holder.itemView.context.getString(R.string.quantity_sold, item.quantitySold)
+            txtRevenue.text = "Revenue: $${item.revenue}"
         }
     }
 

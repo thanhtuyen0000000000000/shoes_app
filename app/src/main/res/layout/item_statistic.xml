@@ -17,11 +17,11 @@
         android:id="@+id/txtQuantitySold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Số lượng đã bán: 0" />
+        android:text="Quantity sold: 0" />
 
     <TextView
         android:id="@+id/txtRevenue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Doanh thu: $0.00" />
+        android:text="Revenue: $0.00" />
 </LinearLayout>

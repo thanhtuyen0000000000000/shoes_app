@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chào mừng trở lại!"
+            android:text="Welcome back!"
             android:textColor="@android:color/white"
             android:textSize="32sp"
             android:textStyle="bold"
@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Đăng nhập để tiếp tục"
+            android:text="Login to continue"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:alpha="0.9" />
@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đăng nhập"
+                    android:text="Login"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/purple"
@@ -70,7 +70,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="Tên đăng nhập"
+                    android:hint="Username"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusTopStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
@@ -95,7 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:hint="Mật khẩu"
+                    android:hint="Password"
                     app:boxBackgroundMode="outline"
                     app:boxCornerRadiusTopStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
@@ -122,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:background="@drawable/button_gradient"
-                    android:text="Đăng nhập"
+                    android:text="Login"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:textSize="18sp"
@@ -134,7 +134,7 @@
                     android:id="@+id/forgotPasswordText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Quên mật khẩu?"
+                    android:text="Forgot password?"
                     android:textColor="@color/purple"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -162,7 +162,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chưa có tài khoản? "
+                        android:text="Don't have an account? "
                         android:textSize="16sp"
                         android:textColor="@color/grey" />
 
@@ -170,7 +170,7 @@
                         android:id="@+id/registerLinkText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Đăng ký ngay"
+                        android:text="Register now"
                         android:textColor="@color/purple"
                         android:textSize="16sp"
                         android:textStyle="bold"

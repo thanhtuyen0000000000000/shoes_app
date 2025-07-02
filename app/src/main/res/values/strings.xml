@@ -1,6 +1,150 @@
 <resources>
-    <string name="app_name">shoes</string>
+    <string name="app_name">Shoes Store</string>
     <string name="intro_title">Step into your<font color="#6033ba"> style\n A world of shoes</font></string>
     <string name="intro_text">Browse the latest style from top brands\nGet personalized recommendations\nEnjoy fast, free shipping</string>
     <string name="intro_signin">Already have an account? <font color="#6033ba">Sign In</font></string>
+    
+    <!-- Common -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="official_brand">Official Brand</string>
+    <string name="product">Product</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="cart">Cart</string>
+    <string name="favorites">Favorites</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
+    <!-- Authentication -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="full_name">Full Name</string>
+    <string name="phone">Phone</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="logout">Logout</string>
+    
+    <!-- Orders -->
+    <string name="my_orders">My Orders</string>
+    <string name="order_history">Order History</string>
+    <string name="no_orders_yet">No orders yet\nStart shopping to see your orders here</string>
+    <string name="processing">Processing</string>
+    <string name="delivered">Delivered</string>
+    <string name="mark_as_delivered">Mark as Delivered</string>
+    <string name="order_total">Total: $%1$.2f</string>
+    <string name="order_tax">Tax: $%1$.2f</string>
+    <string name="order_delivery">Delivery: $%1$.2f</string>
+    <string name="ordered_by">Ordered by: %1$s</string>
+    <string name="quantity">Quantity: %1$d</string>
+    <string name="price">Price: $%1$.2f</string>
+    <string name="size_format">Size %1$s</string>
+    <string name="qty_format">Qty %1$d</string>
+    <string name="subtotal_format">$%1$.2f total</string>
+    
+    <!-- Product -->
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="select_size">Select Size</string>
+    <string name="size_required">Size Required</string>
+    <string name="size_required_message">Please select a size before adding to cart.\n\nAvailable sizes: %1$s</string>
+    <string name="select_now">Select Now</string>
+    <string name="size_selected">Size selected: %1$s</string>
+    <string name="please_select_size">Please select a size above</string>
+    <string name="quantity_sold">Quantity sold: %1$d</string>
+    
+    <!-- Cart -->
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="cart_cleared">Cart cleared</string>
+    <string name="error_clearing_cart">Error clearing cart: %1$s</string>
+    <string name="checkout">Checkout</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="tax">Tax</string>
+    <string name="delivery">Delivery</string>
+    <string name="total">Total</string>
+    <string name="items_in_cart">%1$d items</string>
+    <string name="items_in_favorites">%1$d favorites</string>
+    
+    <!-- Search -->
+    <string name="search_products">Search products...</string>
+    <string name="no_results_found">No results found</string>
+    <string name="found_products">Found %1$d products</string>
+    <string name="no_products_for_brand">Currently no shoes from %1$s brand</string>
+    
+    <!-- Profile -->
+    <string name="user_info">User Information</string>
+    <string name="change_password">Change Password</string>
+    <string name="user_not_found">User information not found</string>
+    <string name="password_change_feature">Password change feature will be developed</string>
+    <string name="not_updated">Not updated</string>
+    <string name="logout_success">Logged out successfully</string>
+    <string name="error_occurred">Error: %1$s</string>
+    
+    <!-- Admin -->
+    <string name="admin_panel">Admin Panel</string>
+    <string name="hello_admin">Hello Admin: %1$s</string>
+    <string name="product_management">Product Management</string>
+    <string name="order_management">Order Management</string>
+    <string name="statistics">Statistics</string>
+    <string name="user_management">User Management</string>
+    <string name="total_revenue">Total Revenue: $%.2f</string>
+    <string name="maintenance_mode">Maintenance Mode</string>
+    <string name="maintenance_on">🔧 Under Maintenance</string>
+    <string name="maintenance_off">✅ Operational</string>
+    <string name="maintenance_enabled">Maintenance mode enabled</string>
+    <string name="maintenance_disabled">Maintenance mode disabled</string>
+    
+    <!-- Settings -->
+    <string name="app_settings">App Settings</string>
+    <string name="app_info">App Information</string>
+    <string name="backup_data">Backup Data</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="app_info_title">Application Information</string>
+    <string name="backup_title">💾 Backup Data</string>
+    <string name="backup_message">Do you want to backup all system data?\n\nData includes:\n• Product information\n• User information\n• Orders\n• Statistics</string>
+    <string name="backup">Backup</string>
+    <string name="clear_cache_title">🧹 Clear Cache</string>
+    <string name="clear_cache_message">Do you want to clear the cache?\n\nThis will:\n• Free up storage space\n• Clear temporary images\n• Refresh the application</string>
+    <string name="clear">Clear</string>
+    <string name="backing_up">Backing up data...</string>
+    <string name="backup_success">✅ Backup successful!</string>
+    <string name="backup_failed">❌ Backup failed: %1$s</string>
+    <string name="clearing_cache">Clearing cache...</string>
+    <string name="cache_cleared">✅ Cache cleared!</string>
+    <string name="cache_clear_failed">❌ Cache clear failed: %1$s</string>
+    
+    <!-- Messages -->
+    <string name="please_fill_all_fields">Please fill in all fields</string>
+    <string name="passwords_not_match">Passwords do not match</string>
+    <string name="username_exists">Username already exists</string>
+    <string name="registration_success">Registration successful</string>
+    <string name="registration_failed">Registration failed: %1$s</string>
+    <string name="check_account_error">Error checking account: %1$s</string>
+    <string name="please_enter_credentials">Please enter username and password</string>
+    <string name="login_success">Login successful</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="username_not_exist">Username does not exist</string>
+    <string name="feature_in_development">This feature will be developed</string>
+    <string name="order_status_updated">Order status updated</string>
+    <string name="order_delivered_and_removed">Order marked as delivered and removed from list</string>
+    <string name="error_updating_order">Error updating order</string>
+    <string name="failed_to_mark_delivered">Failed to mark order as delivered: %1$s</string>
+    <string name="error_loading_orders">Error loading orders</string>
+    <string name="no_orders_found">No orders found</string>
+    <string name="unknown_user">Unknown</string>
+    <string name="error_size_selection">❌ Error: Cannot determine selected size</string>
+    <string name="error_add_to_cart">❌ Error adding to cart: %1$s</string>
+    
 </resources>

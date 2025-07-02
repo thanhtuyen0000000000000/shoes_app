@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@drawable/login_card_bg"
-            android:text="Bắt đầu ngay"
+            android:text="Get started"
             android:textColor="@color/purple"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -132,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Đa dạng"
+                    android:text="Diverse"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:alpha="0.8" />
@@ -155,7 +155,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Chất lượng"
+                    android:text="Quality"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:alpha="0.8" />
@@ -178,7 +178,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nhanh chóng"
+                    android:text="Quick"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"
                     android:alpha="0.8" />

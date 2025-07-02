@@ -22,10 +22,18 @@ class UserManagementActivity : BaseActivity() {
         setContentView(binding.root)
 
         database = FirebaseDatabase.getInstance()
-        userRef = database.getReference("users") // Đường dẫn đến danh sách người dùng
+        userRef = database.getReference("users") // Path to user list
 
+        setupUI()
         setupRecyclerView()
         loadUsers()
+    }
+
+    private fun setupUI() {
+        // Back button functionality
+        binding.backBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -38,6 +46,7 @@ class UserManagementActivity : BaseActivity() {
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
+                var userCount = 0
                 for (userSnapshot in snapshot.children) {
                     val username = userSnapshot.child("username").getValue(String::class.java) ?: continue
                     if (username == "admin") continue
@@ -45,24 +54,28 @@ class UserManagementActivity : BaseActivity() {
                     val password = userSnapshot.child("password").getValue(String::class.java) ?: ""
                     val phone = userSnapshot.child("phonenumber").getValue(String::class.java) ?: ""
 
-                    // Không đọc listCart & listFav để tránh lỗi deserialize
+                    // Don't read listCart & listFav to avoid deserialize errors
                     val user = UserModel(
                         username = username,
                         password = password,
                         phonenumber = phone,
-                        listCart = emptyMap(),  // giữ rỗng vì không cần hiển thị
+                        listCart = emptyMap(),  // keep empty as not needed for display
                         listFav = emptyMap()
                     )
                     userList.add(user)
+                    userCount++
                 }
+                
+                // Update user count display
+                binding.userCountText.text = "Total Users: $userCount"
+                
                 adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@UserManagementActivity, "Failed to load users", Toast.LENGTH_SHORT).show()
+                binding.userCountText.text = "Total Users: Error loading"
             }
         })
     }
-
-
 }

@@ -33,7 +33,7 @@
             android:id="@+id/titleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Giỏ hàng của tôi"
+            android:text="My cart"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/purple"
@@ -70,7 +70,7 @@
             android:id="@+id/emptyTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Giỏ hàng của bạn đang trống"
+            android:text="Your cart is empty"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/darkGrey"
@@ -79,7 +79,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hãy thêm một vài sản phẩm để bắt đầu mua sắm"
+            android:text="Add some products to start shopping"
             android:textSize="14sp"
             android:textColor="@color/grey"
             android:gravity="center"
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_gradient"
-            android:text="Mua sắm ngay"
+            android:text="Shop now"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:paddingHorizontal="32dp"
@@ -153,7 +153,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Tạm tính"
+                    android:text="Subtotal"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
 
@@ -178,7 +178,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Phí giao hàng"
+                    android:text="Shipping fee"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
 
@@ -203,7 +203,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Thuế"
+                    android:text="Tax"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
 
@@ -237,7 +237,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Tổng cộng"
+                    android:text="Total"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -259,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@drawable/login_card_bg"
-                android:text="Thanh toán"
+                android:text="Checkout"
                 android:textColor="@color/purple"
                 android:textStyle="bold"
                 android:textSize="18sp"

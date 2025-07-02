@@ -39,7 +39,7 @@
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Welcome Back"
+                        android:text="@string/welcome_back"
                         android:textColor="@color/grey" />
 
                     <TextView
@@ -52,17 +52,15 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_marginEnd="16dp"
-                    app:srcCompat="@drawable/bell_icon" />
+
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/searchButton"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:scaleType="centerInside"
                     app:srcCompat="@drawable/search_icon" />
 
 
@@ -127,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Official Brand"
+                    android:text="@string/official_brand"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -172,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Product"
+                    android:text="@string/product"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -188,6 +186,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/emptyMessageTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/no_products_for_brand"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey"
+                    android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -245,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Cart"
+                    android:text="@string/cart"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -269,7 +281,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Wish List"
+                    android:text="@string/favorites"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -292,7 +304,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="My Order"
+                    android:text="@string/my_orders"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"/>
             </LinearLayout>
@@ -315,7 +327,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Profile"
+                    android:text="@string/profile"
                     android:textColor="@android:color/white"
                     android:textSize="12sp"/>
             </LinearLayout>

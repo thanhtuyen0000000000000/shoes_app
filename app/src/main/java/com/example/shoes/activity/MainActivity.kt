@@ -16,6 +16,7 @@ import com.example.shoes.Adapter.PopularAdapter
 import com.example.shoes.Model.SliderModel
 import com.example.shoes.Adapter.SliderAdapter
 import com.example.shoes.Model.ItemsModel
+import com.example.shoes.R
 import com.example.shoes.ViewModel.MainViewModel
 import com.example.shoes.databinding.ActivityMainBinding
 import com.google.firebase.database.FirebaseDatabase
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         initBrand()
         initPopular()
         initBottomMenu()
+        initSearchButton()
     }
     
     private fun saveUserSession(username: String) {
@@ -221,7 +223,19 @@ class MainActivity : AppCompatActivity() {
         } else {
             allPopularItems.filter { it.brand.equals(brand, ignoreCase = true) }
         }
-        binding.viewPopular.adapter = PopularAdapter(filteredItems.toMutableList())
+        
+        // Hiển thị/ẩn thông báo và danh sách sản phẩm
+        if (filteredItems.isEmpty() && brand != null) {
+            // Không có sản phẩm của brand này
+            binding.viewPopular.visibility = View.GONE
+            binding.emptyMessageTextView.visibility = View.VISIBLE
+            binding.emptyMessageTextView.text = getString(R.string.no_products_for_brand, brand)
+        } else {
+            // Có sản phẩm hoặc hiển thị tất cả
+            binding.viewPopular.visibility = View.VISIBLE
+            binding.emptyMessageTextView.visibility = View.GONE
+            binding.viewPopular.adapter = PopularAdapter(filteredItems.toMutableList())
+        }
     }
 
     private fun initPopular() {
@@ -237,6 +251,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.loadPopular()
+    }
+
+    private fun initSearchButton() {
+        binding.searchButton.setOnClickListener {
+            try {
+                Log.d("MainActivity", "Search button clicked")
+                val intent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error opening SearchActivity: ${e.message}")
+            }
+        }
     }
 
 //    private fun initPopular(){

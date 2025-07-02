@@ -1,8 +1,10 @@
 package com.example.shoes.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoes.Adapter.OrderAdapter
@@ -22,8 +24,24 @@ class OrderActivity : BaseActivity() {
         setContentView(binding.root)
 
         database = FirebaseDatabase.getInstance().reference
+        
+        // Setup back button
+        binding.backButton.setOnClickListener {
+            navigateToMain()
+        }
+        
+        // Khởi tạo stats ban đầu
+        updateOrderStats(0, 0.0)
+        
         saveNewOrderIfAny()
         loadOrderHistory()
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
+        finish()
     }
 
     private fun saveNewOrderIfAny() {
@@ -43,7 +61,7 @@ class OrderActivity : BaseActivity() {
                 total = totalStr.replace("$", "").toDoubleOrNull() ?: 0.0,
                 tax = taxStr.replace("$", "").toDoubleOrNull() ?: 0.0,
                 delivery = deliveryStr.replace("$", "").toDoubleOrNull() ?: 0.0,
-                status = "Đang xử lý",
+                status = "Processing",
                 timestamp = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                     .format(java.util.Date())
             )
@@ -52,30 +70,66 @@ class OrderActivity : BaseActivity() {
     }
 
     private fun loadOrderHistory() {
+        showLoading(true)
+        
         val userId = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
             .getString("username", null) ?: return
 
         val ordersRef = database.child("users").child(userId).child("listOrders")
         ordersRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                showLoading(false)
+                
                 val orderList = ArrayList<OrderModel>()
+                var totalSpent = 0.0
+                
                 for (orderSnap in snapshot.children) {
                     val order = orderSnap.getValue(OrderModel::class.java)
                     if (order != null) {
                         orderList.add(order)
+                        totalSpent += order.total
                     }
                 }
+                
+                // Cập nhật thống kê
+                updateOrderStats(orderList.size, totalSpent)
+                
                 if (orderList.isEmpty()) {
-                    Toast.makeText(this@OrderActivity, "Chưa có đơn hàng nào", Toast.LENGTH_SHORT).show()
-                    return
+                    showEmptyState(true)
+                } else {
+                    showEmptyState(false)
+                    binding.recyclerViewOrders.layoutManager = LinearLayoutManager(this@OrderActivity)
+                    binding.recyclerViewOrders.adapter = OrderAdapter(orderList)
                 }
-                binding.recyclerViewOrders.layoutManager = LinearLayoutManager(this@OrderActivity)
-                binding.recyclerViewOrders.adapter = OrderAdapter(orderList)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("OrderActivity", "Lỗi tải đơn hàng: ${error.message}")
+                showLoading(false)
+                Log.e("OrderActivity", "Error loading orders: ${error.message}")
+                Toast.makeText(this@OrderActivity, "Error loading orders", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    
+    private fun showLoading(show: Boolean) {
+        binding.loadingLayout.visibility = if (show) View.VISIBLE else View.GONE
+        binding.recyclerViewOrders.visibility = if (show) View.GONE else View.VISIBLE
+        binding.emptyStateLayout.visibility = View.GONE
+    }
+    
+    private fun showEmptyState(show: Boolean) {
+        binding.emptyStateLayout.visibility = if (show) View.VISIBLE else View.GONE
+        binding.recyclerViewOrders.visibility = if (show) View.GONE else View.VISIBLE
+        binding.loadingLayout.visibility = View.GONE
+    }
+
+    private fun updateOrderStats(totalOrders: Int, totalSpent: Double) {
+        binding.totalOrdersText.text = "$totalOrders Total Orders"
+        binding.totalSpentText.text = "$%.2f Spent".format(totalSpent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        navigateToMain()
     }
 }
