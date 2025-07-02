@@ -41,7 +41,8 @@ class AdminActivity : BaseActivity() {
 
         // Statistics
         binding.statisticsCard.setOnClickListener {
-            startActivity(Intent(this, StatisticActivity::class.java))
+//            startActivity(Intent(this, StatisticActivity::class.java))
+            Toast.makeText(this, "This feature is under development", Toast.LENGTH_SHORT).show()
         }
 
         // User Management
